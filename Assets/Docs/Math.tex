@@ -1,0 +1,173 @@
+\documentclass{article}
+\usepackage{amsmath}  % To use math symbols and formulas
+
+\begin{document}
+
+\section{Lunar Dust Damage Prevention}
+
+A. Gravity \& Motion in Lunar Conditions
+
+Lunar gravity affects dust movement and impact forces.  
+Acceleration due to lunar gravity:  
+\[
+g_{\text{Moon}} = 1.625 \, \text{m/s}^2
+\]
+
+Projectile motion equations (dust particle trajectories):
+- Horizontal displacement: 
+  \[
+  x = v_0 \cos(\theta) t
+  \]
+- Vertical displacement:
+  \[
+  y = v_0 \sin(\theta) t - \frac{1}{2} g_{\text{Moon}} t^2
+  \]
+- Time of flight:
+  \[
+  t_{\text{flight}} = \frac{2 v_0 \sin(\theta)}{g_{\text{Moon}}}
+  \]
+- Impact velocity:
+  \[
+  v_{\text{impact}} = \sqrt{v_x^2 + v_y^2}
+  \]
+
+B. Dust Adhesion (Electrostatic Forces)
+
+Coulomb’s Law (force between charged dust and material surface):
+\[
+F = k_e \frac{|q_1 q_2|}{r^2}
+\]
+where:  
+\( k_e = 8.99 \times 10^9 \, \text{Nm}^2/\text{C}^2 \) (Coulomb’s constant)  
+\( q_1, q_2 \) = charge of dust particle and surface  
+\( r \) = separation distance  
+
+Electric field near a charged surface (simplified as a plate):
+\[
+E = \frac{\sigma}{\varepsilon_0}
+\]
+where:  
+\( \sigma \) = charge density on the surface  
+\( \varepsilon_0 = 8.85 \times 10^{-12} \, \text{F/m} \) (permittivity of free space)
+
+C. Dust Impact \& Erosion (Abrasion Damage)
+
+Kinetic Energy of Dust Impact:
+\[
+KE = \frac{1}{2} m v^2
+\]
+where:  
+\( m \) = dust particle mass  
+\( v \) = impact velocity
+
+Stress from impact (for wear and material erosion):
+\[
+\sigma = \frac{F}{A}
+\]
+where:  
+\( A \) = impact area
+
+Hertzian Contact Stress (if particles are spherical and deform material):
+\[
+P_{\text{max}} = \frac{3F}{2 \pi a^2}
+\]
+where:  
+\( a \) = contact radius
+
+\section{Thermal Insulation}
+
+A. Heat Transfer Mechanisms
+
+Since space is a vacuum, conduction is minimal, and heat transfer is dominated by radiation.
+
+Thermal Conductivity (Fourier’s Law - for conductive heat transfer, if necessary within materials):
+\[
+Q = -k A \frac{dT}{dx}
+\]
+where:  
+\( k \) = thermal conductivity of material  
+\( A \) = surface area  
+\( \frac{dT}{dx} \) = temperature gradient across the material
+
+Thermal Radiation (Stefan-Boltzmann Law):
+\[
+P = \sigma \varepsilon A T^4
+\]
+where:  
+\( P \) = power radiated  
+\( \sigma = 5.67 \times 10^{-8} \, \text{W/m}^2 \text{K}^4 \) (Stefan-Boltzmann constant)  
+\( \varepsilon \) = emissivity of the material  
+\( A \) = surface area  
+\( T \) = absolute temperature in Kelvin
+
+Radiative Heat Exchange Between Two Surfaces:
+\[
+Q = \sigma A \varepsilon \left(T_1^4 - T_2^4\right)
+\]
+where:  
+\( T_1, T_2 \) = temperatures of the two surfaces
+
+\section{Cosmic \& Solar Radiation Protection}
+
+A. Particle Radiation Interactions
+
+Energy of a Cosmic Ray Particle (Relativistic Energy Equation):
+\[
+E = \gamma m c^2
+\]
+where:  
+\( \gamma = \frac{1}{\sqrt{1 - \frac{v^2}{c^2}}} \) (Lorentz factor)  
+\( m \) = particle rest mass  
+\( c \) = speed of light
+
+Linear Energy Transfer (LET) - Energy deposited per unit distance:
+\[
+LET = \frac{dE}{dx}
+\]
+where:  
+\( dE \) = energy lost  
+\( dx \) = distance traveled
+
+Stopping Power (Bethe-Bloch Equation for Charged Particles in Matter):
+\[
+-\frac{dE}{dx} = \frac{4\pi N_A r_e^2 m_e c^2 Z}{\beta^2 A} \left[ \ln \left( \frac{2m_e c^2 \beta^2 \gamma^2}{I} \right) - \beta^2 \right]
+\]
+where:  
+\( N_A \) = Avogadro’s number  
+\( r_e \) = classical electron radius  
+\( m_e \) = electron mass  
+\( Z, A \) = atomic number and mass number of shielding material  
+\( \beta = \frac{v}{c} \)  
+\( \gamma \) = relativistic factors  
+\( I \) = mean excitation energy of the material
+
+B. Shielding Effectiveness
+
+Attenuation of Radiation in a Material (Exponential Absorption Law - Beer-Lambert Law for X-rays and gamma rays):
+\[
+I = I_0 e^{-\mu x}
+\]
+where:  
+\( I_0 \) = initial intensity of radiation  
+\( I \) = intensity after passing through the material  
+\( \mu \) = linear attenuation coefficient (material dependent)  
+\( x \) = thickness of shielding
+
+Radiation Dose (Energy Absorbed by Material, Gray Units - Gy):
+\[
+D = \frac{E}{m}
+\]
+where:  
+\( D \) = dose in Gray (J/kg)  
+\( E \) = total energy absorbed  
+\( m \) = mass of material
+
+Equivalent Dose (to Account for Different Radiation Types - Sieverts, Sv):
+\[
+H = D \times Q
+\]
+where:  
+\( H \) = equivalent dose in Sieverts (Sv)  
+\( Q \) = radiation weighting factor (depends on type: 1 for X-rays, 20 for alpha particles)
+
+\end{document}
