@@ -1,3 +1,4 @@
+using System;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -35,24 +36,24 @@ class MaterialDamage : MonoBehaviour {
         // damageTexture.SetPixel((int)pixelCoordinates.x, (int)pixelCoordinates.y, Color.Lerp(Color.green, Color.red, damage[pixelCoordinates.x]));
         // damageTexture.Apply();
 
-        Debug.Log(normal.ToString());
+        Debug.Log(transform.InverseTransformPoint(position).ToString());
     }
 
-    Vector2 GetUVFromLocalPosition(Vector3 normal)
+    Vector2 GetUVFromLocalPosition(Vector3 position, Vector3 normal)
     {
         // Define the UV mapping for each face of the cube
-        if (normal.x > 0.5f) {  // Right face
+        if (normal.x > 0.5f) {  // 5
             return new Vector2((normal.z + 0.5f) / 1f, (normal.y + 0.5f) / 1f);
-        } else if (normal.x < -0.5f) {  // Left face
+        } else if (normal.x < -0.5f) {  // 3
             return new Vector2((-normal.z + 0.5f) / 1f, (normal.y + 0.5f) / 1f);
-        } else if (normal.y > 0.5f) {  // Top face
+        } else if (normal.y > 0.5f) {  // 4
             return new Vector2((normal.x + 0.5f) / 1f, (-normal.z + 0.5f) / 1f);
-        } else if (normal.y < -0.5f) {  // Bottom face
-            return new Vector2((normal.x + 0.5f) / 1f, (normal.z + 0.5f) / 1f);
-        } else if (normal.z > 0.5f) {  // Front face
+        } else if (normal.z > 0.5f) {  // 2
             return new Vector2((normal.x + 0.5f) / 1f, (normal.y + 0.5f) / 1f);
-        } else {  // Back face
+        } else if (normal.z < 0.5f) {  // B
             return new Vector2((-normal.x + 0.5f) / 1f, (normal.y + 0.5f) / 1f);
+        } else {  // Bottom face
+            return new Vector2((normal.x + 0.5f) / 1f, (normal.z + 0.5f) / 1f);
         }
     }
 }  
