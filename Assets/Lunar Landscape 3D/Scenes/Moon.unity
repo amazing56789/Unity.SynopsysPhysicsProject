@@ -10553,7 +10553,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 9e60dd87a12a911488a899787b2ff1d6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 275e9274eff2b024ba42a420ea80b0ad, type: 2}
+      objectReference: {fileID: 2100000, guid: ce948fd0340f53d42b91e2605984369f, type: 2}
     - target: {fileID: 919132149155446097, guid: 9e60dd87a12a911488a899787b2ff1d6, type: 3}
       propertyPath: m_Name
       value: Simulator
@@ -10601,7 +10601,7 @@ BoxCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
@@ -10620,7 +10620,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dustSystem: {fileID: 987547546}
   simulator:
-    ultimateYieldStrengthGPa: 0
     yieldStrengthGPa: 0.25
     youngModulusGPa: 200
     poissonRatio: 0.29

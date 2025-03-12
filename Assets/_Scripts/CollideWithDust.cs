@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MaterialDamage))]
@@ -16,9 +15,8 @@ public class CollideWithDust : MonoBehaviour {
     void Start()
     {
         CalibrateMaterialProperties();
-        materialDamage = gameObject.GetComponent<MaterialDamage>();
+        materialDamage = GetComponent<MaterialDamage>();
     }
-
     public void CalibrateMaterialProperties(DeformableContactObject newSimulator, NonDeformableContactObject newDust)
     {
         pMaxConst = Mathf.Pow(4f, 11/30) * Mathf.Pow(3f, 8/5)
@@ -44,13 +42,15 @@ public class CollideWithDust : MonoBehaviour {
 
     void OnParticleCollision()
     {
+        Debug.Log("nest");
         int numEvents = dustSystem.GetCollisionEvents(gameObject, collisionEvents);
     
-        foreach (ParticleCollisionEvent i in collisionEvents) {
-            maxStress = pMaxConst * Mathf.Pow(i.velocity.magnitude, 8/5);
+        for (int i = 0; i < numEvents; i++) {
+            maxStress = pMaxConst * Mathf.Pow(collisionEvents[i].velocity.magnitude, 8/5);
             
             if (true /*maxStress > simulator.yieldStrengthGPa*/) {
-                materialDamage.ApplyDamage(maxStress, i.intersection);
+                Debug.Log("zest");
+                materialDamage.ApplyDamage(maxStress, collisionEvents[i].intersection);
             }
         }
     }
