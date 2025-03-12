@@ -5,13 +5,8 @@ using UnityEngine;
 public class CollideWithDust : MonoBehaviour {
     [SerializeField] private ParticleSystem dustSystem;
 
-    // @#TODO: add units to var names
-    [Header("Material & Lunar Dust Properties")]
-    [SerializeField] private float materialYieldStrength;
-    public float materialYoungModulus;
-    public float materialPoissonRatio;
-    [SerializeField] private float dustYoungModulus;
-    [SerializeField] private float dustPoissonRatio;
+    [SerializeField] private DeformableContactObject simulator;
+    [SerializeField] private NonDeformableContactObject dustParticle;
 
 
     private List<ParticleCollisionEvent> collisionEvents;
@@ -20,11 +15,24 @@ public class CollideWithDust : MonoBehaviour {
     void Start()
     {
         collisionEvents = new List<ParticleCollisionEvent>();
+        
+        materialDamage = gameObject.GetComponent<MaterialDamage>();
+    }
+
+    public void CalibrateMaterialProperties(DeformableContactObject newSimulator, NonDeformableContactObject newDust)
+    {
         pMaxConst = Mathf.Pow(4f, 11/30) * Mathf.Pow(3f, 8/5)
             * Mathf.Pow(
-                1/(((1 - materialPoissonRatio*materialPoissonRatio)/materialYoungModulus) + ((1 - dustPoissonRatio*dustPoissonRatio)/dustYoungModulus))
+                1/(((1 - simulator.poissonRatio*simulator.poissonRatio)/simulator.youngModulus) + ((1 - dustParticle.poissonRatio*dustParticle.poissonRatio)/dustParticle.youngModulus))
             , 6/5) / Mathf.PI;
-        materialDamage = gameObject.GetComponent<MaterialDamage>();
+    }
+    public void CalibrateMaterialProperties(DeformableContactObject newSimulator)
+    {
+        CalibrateMaterialProperties(newSimulator, dustParticle);
+    }
+    public void CalibrateMaterialProperties()
+    {
+        CalibrateMaterialProperties(simulator, dustParticle);
     }
 
     // https://wp.optics.arizona.edu/optomech/wp-content/uploads/sites/53/2016/10/OPTI-521-Tutorial-on-Hertz-contact-stress-Xiaoyin-Zhu.pdf
@@ -41,7 +49,7 @@ public class CollideWithDust : MonoBehaviour {
         for (int i = 0; i < numEvents; i++) {
             maxStress = pMaxConst * Mathf.Pow(collisionEvents[i].velocity.magnitude, 8/5);
             
-            if (maxStress > materialYieldStrength) {
+            if (maxStress > simulator.yieldStrength) {
                 materialDamage.ApplyDamage(maxStress, collisionEvents[i].intersection);
             }
         }
