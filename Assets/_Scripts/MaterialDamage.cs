@@ -1,59 +1,72 @@
-using System;
-using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 class MaterialDamage : MonoBehaviour {
-    public NonDeformableContactObject simulator;
-    public int HeatmapResolution = 1024;
-    public float maxDamage;
-    private RenderTexture Heatmap;
+    public int HeatmapWidth = 1000;
+    public float maxDamage = 1000f;
+    private Texture2D Heatmap;
+    // 
     //Caching bc used a lot
-    private float[][] damages;
+    private Color32[] pixels;
+    private float[] damages;
+    private Matrix4x4 worldToLocalMatrix;
+    private bool updateTextureFlag;
+    private Color GREEN;
+    private Color RED;
 
     void Start()
     {
-        Heatmap = new(HeatmapResolution, HeatmapResolution, 0, RenderTextureFormat.RGFloat)
-        {
-            enableRandomWrite = true
-        };
-        // worldToLocalMatrix = transform.worldToLocalMatrix;
-        // damages = new float[HeatmapResolution * HeatmapResolution];
+        GREEN = new Color(0, 1, 0, 0);
+        RED = new Color(1, 0, 0, 0);
+        Heatmap = new(HeatmapWidth, 3/2 * HeatmapWidth, TextureFormat.RGFloat, false);
+        pixels = Heatmap.GetPixels32();
+        for (int i = 0; i < pixels.Length; i++)
+            pixels[i] = GREEN;
+        Heatmap.SetPixels32(pixels);
+        Heatmap.Apply();
+        worldToLocalMatrix = transform.worldToLocalMatrix;
+        GetComponent<Renderer>().material.mainTexture = Heatmap;
     }
-    public void ApplyDamage(float damage, Vector3 position, Vector3 normal)
+    void Update()
     {
-        // localPosition = transform.InverseTransformPoint(position);
-
-        // localPosition.x /= transform.localScale.x;
-        // localPosition.y /= transform.localScale.y;
-        // localPosition.z /= transform.localScale.z;
-
-        // uv = GetUVFromLocalPosition(localPosition);
-
-        // pixelCoordinates.Set(uv.x * HeatmapResolution, uv.y * HeatmapResolution);
-        // damage[pixelCoordinates.x][pixelCoordinates.y] = damage[pixelCoordinates.x][pixelCoordinates.y] + damage;
-
-        // damageTexture.SetPixel((int)pixelCoordinates.x, (int)pixelCoordinates.y, Color.Lerp(Color.green, Color.red, damage[pixelCoordinates.x]));
-        // damageTexture.Apply();
-
-        Debug.Log(transform.InverseTransformPoint(position).ToString());
+        if (updateTextureFlag) {
+            Heatmap.SetPixels32(pixels);
+            Heatmap.Apply();
+            updateTextureFlag = false;
+        }
+    }
+    int x, y;
+    public void ApplyDamage(float damage, Vector3 worldPosition)
+    {
+        GetPixelFromLocalPosition(worldToLocalMatrix.MultiplyPoint3x4(worldPosition), out x, out y);
+        damages[x * HeatmapWidth + y] += 100 * damage / maxDamage;
+        Debug.Log(damages[x * HeatmapWidth + y]);
+        pixels[x * HeatmapWidth + y] = Color32.Lerp(GREEN, RED, damages[x * HeatmapWidth + y]);
+        updateTextureFlag = true;
     }
 
-    Vector2 GetUVFromLocalPosition(Vector3 position, Vector3 normal)
+    private const float oneSixth = 1/6;
+    void GetPixelFromLocalPosition(Vector3 localPosition, out int x, out int y)
     {
         // Define the UV mapping for each face of the cube
-        if (position.x > 0.49f) {  // 5
-            return new Vector2(-position.z + 0.5f, position.y + 0.5f);
-        } else if (position.x < -0.49f) {  // 3
-            return new Vector2(position.y + 0.5f, -position.z + 0.5f);
-        } else if (position.y > 0.49f) {  // 4
-            return new Vector2(position.x + 0.5f, -position.z + 0.5f);
-        } else if (position.z > 0.49f) {  // 2
-            return new Vector2(position.x + 0.5f, position.y + 0.5f);
-        } else if (position.z < 0.49f) {  // B
-            return new Vector2(-position.x + 0.5f, position.y + 0.5f);
+        if (localPosition.x > 0.49f) {  // 5
+            x = (int) (HeatmapWidth * (localPosition.z/2f + 0.75f));
+            y = (int) (2/3 * HeatmapWidth * (localPosition.y/3f + 5*oneSixth));
+        } else if (localPosition.x < -0.49f) {  // 3
+            x = (int) (HeatmapWidth * (-localPosition.z/2f + 0.75f));
+            y = (int) (2/3 * HeatmapWidth * (localPosition.y/3f + 0.5f));
+        } else if (localPosition.y > 0.49f) {  // 4
+            x = (int) (HeatmapWidth * (-localPosition.z/2f + 0.25f));
+            y = (int) (2/3 * HeatmapWidth * (localPosition.x/3f + 5*oneSixth));
+        } else if (localPosition.z > 0.49f) {  // 2
+            x = (int) (HeatmapWidth * (-localPosition.x/2f + 0.25f));
+            y = (int) (2/3 * HeatmapWidth * (localPosition.y/3f + 0.5f));
+        } else if (localPosition.z < 0.49f) {  // B
+            x = (int) (HeatmapWidth * (localPosition.x/2 + 0.25f));
+            y = (int) (2/3 * HeatmapWidth * (localPosition.y/3f + oneSixth));
         } else {  // Bottom face
-            return new Vector2(position.x + 0.5f, position.z + 0.5f);
+            Debug.LogError("Hit on bottom");
+            x = (int) (HeatmapWidth * (-localPosition.x/2f + 0.75f));
+            y = (int) (2/3 * HeatmapWidth * (localPosition.z/3 + oneSixth));
         }
     }
 }  

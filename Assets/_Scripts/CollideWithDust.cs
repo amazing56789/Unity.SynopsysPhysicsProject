@@ -10,12 +10,11 @@ public class CollideWithDust : MonoBehaviour {
     [SerializeField] private NonDeformableContactObject dustParticle;
 
 
-    private List<ParticleCollisionEvent> collisionEvents;
+    private List<ParticleCollisionEvent> collisionEvents = new();
     private MaterialDamage materialDamage;
 
     void Start()
     {
-        collisionEvents = new List<ParticleCollisionEvent>();
         CalibrateMaterialProperties();
         materialDamage = gameObject.GetComponent<MaterialDamage>();
     }
@@ -41,7 +40,7 @@ public class CollideWithDust : MonoBehaviour {
     // 1/E_* = (1-v^2_1)/E_1 + (1-v^2_2)/E_2
     // below is (4^(11/3) * (3^(8/5)) * E^(6/5))/pi (Pmax divided by KE^(8/5))
     private float pMaxConst;
-    private float maxStress;
+    private float maxStress = 0;
 
     void OnParticleCollision()
     {
@@ -51,7 +50,7 @@ public class CollideWithDust : MonoBehaviour {
             maxStress = pMaxConst * Mathf.Pow(i.velocity.magnitude, 8/5);
             
             if (true /*maxStress > simulator.yieldStrengthGPa*/) {
-                materialDamage.ApplyDamage(maxStress, i.intersection, i.normal);
+                materialDamage.ApplyDamage(maxStress, i.intersection);
             }
         }
     }

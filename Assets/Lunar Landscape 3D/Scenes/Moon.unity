@@ -10639,11 +10639,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd78c7320ac7044fad120e93a53b5dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simulator:
-    youngModulusGPa: 0
-    poissonRatio: 0
-  HeatmapResolution: 1024
-  maxDamage: 0
+  HeatmapWidth: 1000
+  maxDamage: 1000
 --- !u!1 &1933991927
 GameObject:
   m_ObjectHideFlags: 0
