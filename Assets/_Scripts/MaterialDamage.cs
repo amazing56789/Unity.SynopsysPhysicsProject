@@ -43,17 +43,17 @@ class MaterialDamage : MonoBehaviour {
     {
         // Define the UV mapping for each face of the cube
         if (position.x > 0.49f) {  // 5
-            return new Vector2((position.z + 0.49f) / 1f, (position.y + 0.49f) / 1f);
+            return new Vector2(-position.z + 0.5f, position.y + 0.5f);
         } else if (position.x < -0.49f) {  // 3
-            return new Vector2((-position.z + 0.49f) / 1f, (position.y + 0.49f) / 1f);
+            return new Vector2(position.y + 0.5f, -position.z + 0.5f);
         } else if (position.y > 0.49f) {  // 4
-            return new Vector2((position.x + 0.49f) / 1f, (-position.z + 0.49f) / 1f);
+            return new Vector2(position.x + 0.5f, -position.z + 0.5f);
         } else if (position.z > 0.49f) {  // 2
-            return new Vector2((position.x + 0.49f) / 1f, (position.y + 0.49f) / 1f);
+            return new Vector2(position.x + 0.5f, position.y + 0.5f);
         } else if (position.z < 0.49f) {  // B
-            return new Vector2((-position.x + 0.49f) / 1f, (position.y + 0.49f) / 1f);
+            return new Vector2(-position.x + 0.5f, position.y + 0.5f);
         } else {  // Bottom face
-            return new Vector2((position.x + 0.49f) / 1f, (position.z + 0.49f) / 1f);
+            return new Vector2(position.x + 0.5f, position.z + 0.5f);
         }
     }
 }  
