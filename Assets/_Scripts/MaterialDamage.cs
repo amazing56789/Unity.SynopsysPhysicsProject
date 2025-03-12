@@ -42,18 +42,18 @@ class MaterialDamage : MonoBehaviour {
     Vector2 GetUVFromLocalPosition(Vector3 position, Vector3 normal)
     {
         // Define the UV mapping for each face of the cube
-        if (normal.x > 0.5f) {  // 5
-            return new Vector2((normal.z + 0.5f) / 1f, (normal.y + 0.5f) / 1f);
-        } else if (normal.x < -0.5f) {  // 3
-            return new Vector2((-normal.z + 0.5f) / 1f, (normal.y + 0.5f) / 1f);
-        } else if (normal.y > 0.5f) {  // 4
-            return new Vector2((normal.x + 0.5f) / 1f, (-normal.z + 0.5f) / 1f);
-        } else if (normal.z > 0.5f) {  // 2
-            return new Vector2((normal.x + 0.5f) / 1f, (normal.y + 0.5f) / 1f);
-        } else if (normal.z < 0.5f) {  // B
-            return new Vector2((-normal.x + 0.5f) / 1f, (normal.y + 0.5f) / 1f);
+        if (position.x > 0.49f) {  // 5
+            return new Vector2((position.z + 0.49f) / 1f, (position.y + 0.49f) / 1f);
+        } else if (position.x < -0.49f) {  // 3
+            return new Vector2((-position.z + 0.49f) / 1f, (position.y + 0.49f) / 1f);
+        } else if (position.y > 0.49f) {  // 4
+            return new Vector2((position.x + 0.49f) / 1f, (-position.z + 0.49f) / 1f);
+        } else if (position.z > 0.49f) {  // 2
+            return new Vector2((position.x + 0.49f) / 1f, (position.y + 0.49f) / 1f);
+        } else if (position.z < 0.49f) {  // B
+            return new Vector2((-position.x + 0.49f) / 1f, (position.y + 0.49f) / 1f);
         } else {  // Bottom face
-            return new Vector2((normal.x + 0.5f) / 1f, (normal.z + 0.5f) / 1f);
+            return new Vector2((position.x + 0.49f) / 1f, (position.z + 0.49f) / 1f);
         }
     }
 }  
