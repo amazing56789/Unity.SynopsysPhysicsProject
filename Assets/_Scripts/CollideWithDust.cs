@@ -17,12 +17,11 @@ public class CollideWithDust : MonoBehaviour {
         CalibrateMaterialProperties();
         materialDamage = GetComponent<MaterialDamage>();
     }
-    public void CalibrateMaterialProperties(DeformableContactObject newSimulator, NonDeformableContactObject newDust)
+    public void CalibrateMaterialProperties(DeformableContactObject newSimulator, NonDeformableContactObject newDustParticle)
     {
-        pMaxConst = Mathf.Pow(4f, 11/30) * Mathf.Pow(3f, 8/5)
-            * Mathf.Pow(
-                1/(((1 - simulator.poissonRatio*simulator.poissonRatio)/simulator.youngModulusGPa) + ((1 - dustParticle.poissonRatio*dustParticle.poissonRatio)/dustParticle.youngModulusGPa))
-            , 6/5) / Mathf.PI;
+        simulator = newSimulator;
+        dustParticle = newDustParticle;
+        dTotalConst = simulator.calibrationConstant * dustParticle.mass / (2 * simulator.hardness);
     }
     public void CalibrateMaterialProperties(DeformableContactObject newSimulator)
     {
@@ -33,25 +32,15 @@ public class CollideWithDust : MonoBehaviour {
         CalibrateMaterialProperties(simulator, dustParticle);
     }
 
-    // https://wp.optics.arizona.edu/optomech/wp-content/uploads/sites/53/2016/10/OPTI-521-Tutorial-on-Hertz-contact-stress-Xiaoyin-Zhu.pdf
-    // F = (4(E_k^(1/3))(E_*)R); impact depth = 2E_k/F = (2(F^2)/(E^2_*))^(1/3); Pmax = 3F/(2pi(a^2))
-    // 1/E_* = (1-v^2_1)/E_1 + (1-v^2_2)/E_2
-    // below is (4^(11/3) * (3^(8/5)) * E^(6/5))/pi (Pmax divided by KE^(8/5))
-    private float pMaxConst;
-    private float maxStress = 0;
-
+    private float dTotalConst;
+    private float volumeLoss;
     void OnParticleCollision()
     {
-        Debug.Log("nest");
         int numEvents = dustSystem.GetCollisionEvents(gameObject, collisionEvents);
     
         for (int i = 0; i < numEvents; i++) {
-            maxStress = pMaxConst * Mathf.Pow(collisionEvents[i].velocity.magnitude, 8/5);
-            
-            if (true /*maxStress > simulator.yieldStrengthGPa*/) {
-                Debug.Log("zest");
-                materialDamage.ApplyDamage(maxStress, collisionEvents[i].intersection);
-            }
+            volumeLoss = dTotalConst * collisionEvents[i].velocity.sqrMagnitude * Random.Range(dustParticle.minSlide, dustParticle.maxSlide);    
+            materialDamage.ApplyDamage(volumeLoss, collisionEvents[i].intersection);
         }
     }
 }

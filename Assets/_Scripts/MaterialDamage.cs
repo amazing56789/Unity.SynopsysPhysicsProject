@@ -39,11 +39,9 @@ class MaterialDamage : MonoBehaviour {
     int x, y;
     public void ApplyDamage(float damage, Vector3 worldPosition)
     {
-        Debug.Log(x.ToString() + ", " + y.ToString() + ": " + Heatmap.GetPixel(x, y));
         GetPixelFromLocalPosition(worldToLocalMatrix.MultiplyPoint3x4(worldPosition), out x, out y);
-        // damages[x * HeatmapWidth + y] += 100 * damage / maxDamage;
-        damages[x * HeatmapWidth + y] = 1f;
-        pixels[x * HeatmapWidth + y] = RED;//Color32.Lerp(GREEN, RED, damages[x * HeatmapWidth + y]);
+        damages[x * HeatmapWidth + y] += damage;
+        pixels[x * HeatmapWidth + y] = RED;//Color32.Lerp(GREEN, RED, damage[x * HeatmapWidth + y]);
         updateTextureFlag = true;
     }
 
