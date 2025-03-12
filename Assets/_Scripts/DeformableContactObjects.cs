@@ -1,3 +1,4 @@
+[System.Serializable]
 public struct DeformableContactObject {
     // #@TODO: add types to var names
     public float yieldStrength;

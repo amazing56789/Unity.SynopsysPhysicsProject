@@ -10605,17 +10605,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866998618}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53f471a2604a6ba4dbedec4d490a1d11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dustSystem: {fileID: 987547546}
-  materialYieldStrength: 0
-  materialYoungModulus: 0
-  materialPoissonRatio: 0
-  dustYoungModulus: 0
-  dustPoissonRatio: 0
+  simulator:
+    yieldStrength: 10
+    youngModulus: 0
+    poissonRatio: 0
+  dustParticle:
+    youngModulus: 0
+    poissonRatio: 0
 --- !u!114 &1866998622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10623,7 +10625,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866998618}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfd78c7320ac7044fad120e93a53b5dd, type: 3}
   m_Name: 
