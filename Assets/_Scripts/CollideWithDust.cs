@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MaterialDamage))]
@@ -15,7 +16,7 @@ public class CollideWithDust : MonoBehaviour {
     void Start()
     {
         collisionEvents = new List<ParticleCollisionEvent>();
-        
+        CalibrateMaterialProperties();
         materialDamage = gameObject.GetComponent<MaterialDamage>();
     }
 
@@ -23,7 +24,7 @@ public class CollideWithDust : MonoBehaviour {
     {
         pMaxConst = Mathf.Pow(4f, 11/30) * Mathf.Pow(3f, 8/5)
             * Mathf.Pow(
-                1/(((1 - simulator.poissonRatio*simulator.poissonRatio)/simulator.youngModulus) + ((1 - dustParticle.poissonRatio*dustParticle.poissonRatio)/dustParticle.youngModulus))
+                1/(((1 - simulator.poissonRatio*simulator.poissonRatio)/simulator.youngModulusGPa) + ((1 - dustParticle.poissonRatio*dustParticle.poissonRatio)/dustParticle.youngModulusGPa))
             , 6/5) / Mathf.PI;
     }
     public void CalibrateMaterialProperties(DeformableContactObject newSimulator)
@@ -46,11 +47,11 @@ public class CollideWithDust : MonoBehaviour {
     {
         int numEvents = dustSystem.GetCollisionEvents(gameObject, collisionEvents);
     
-        for (int i = 0; i < numEvents; i++) {
-            maxStress = pMaxConst * Mathf.Pow(collisionEvents[i].velocity.magnitude, 8/5);
+        foreach (ParticleCollisionEvent i in collisionEvents) {
+            maxStress = pMaxConst * Mathf.Pow(i.velocity.magnitude, 8/5);
             
-            if (maxStress > simulator.yieldStrength) {
-                materialDamage.ApplyDamage(maxStress, collisionEvents[i].intersection);
+            if (true /*maxStress > simulator.yieldStrengthGPa*/) {
+                materialDamage.ApplyDamage(maxStress, i.intersection, i.normal);
             }
         }
     }

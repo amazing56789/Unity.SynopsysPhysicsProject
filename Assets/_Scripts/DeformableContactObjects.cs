@@ -1,7 +1,7 @@
 [System.Serializable]
 public struct DeformableContactObject {
-    // #@TODO: add types to var names
-    public float yieldStrength;
-    public float youngModulus;
+    public float ultimateYieldStrengthGPa;
+    public float yieldStrengthGPa;
+    public float youngModulusGPa;
     public float poissonRatio;
 }
